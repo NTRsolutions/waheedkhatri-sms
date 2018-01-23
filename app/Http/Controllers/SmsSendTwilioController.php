@@ -103,7 +103,7 @@ class SmsSendTwilioController extends Controller
 						$response = $this->twilio->message(+923007272332, $e->getMessage());
 					}
 				}else{
-					Members::where('id' ,'=',$number->id)->delete();
+					Members::where('id' ,'=',$useData->id)->delete();
 				}
 		endforeach;
 		Members::where('membertype_id' ,'=',$request->membertype_id)->update(['leads_id' => $request->leads_id]);
