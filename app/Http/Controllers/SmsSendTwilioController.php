@@ -220,7 +220,7 @@ class SmsSendTwilioController extends Controller
 	*/
 	public function receiveSmsData()
 	{
-		$receiveSms = ReceiveSms::orderBy('created_at', 'desc')->get();
+		$receiveSms = ReceiveSms::orderBy('created_at', 'asc')->get();
 		return view('backend.receivesms_data', compact('receiveSms'));
 	}
 
