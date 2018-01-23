@@ -34,7 +34,14 @@ class SmsSendTwilioController extends Controller
 
 	public function smssingleSend(Request $request)
 	{
-		$response = $this->twilio->message($request->phone, $request->sms_text);
+		$number = str_replace('+','', $request->phone);
+
+		if(strlen(trim($number)) == 11)
+		{
+			$response = $this->twilio->message($request->phone, $request->sms_text);
+		}else{
+			Members::where('phone' ,'=',$request->phone)->delete();
+		}
 		if(isset($request->id))
 		{
 			ReceiveSms::where('id' ,'=',$request->id)->update(['reply_status' => 'Already Reply']);
@@ -84,8 +91,8 @@ class SmsSendTwilioController extends Controller
 			$message = str_replace('{{Email}}',$useData->email, $message);
 			$message = str_replace('{{Phone}}',$useData->phone, $message);
 			$message = str_replace('{{Country}}',$useData->country, $message);
-			$number = str_replace('+1','', $number);
-				if(strlen(trim($number)) == '10')
+			$number = str_replace('+','', $number);
+				if(strlen(trim($number)) == 11)
 				{
 					$number = '+1'.$number;
 					try {
@@ -96,7 +103,7 @@ class SmsSendTwilioController extends Controller
 						$response = $this->twilio->message(+923007272332, $e->getMessage());
 					}
 				}else{
-					$number = '+1'.$number;
+					$number = '+'.$number;
 					Members::where('phone' ,'=',$number)->delete();
 				}
 		endforeach;
