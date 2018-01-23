@@ -97,7 +97,7 @@ class SmsSendTwilioController extends Controller
 					$number = '+'.$number;
 					try {
 						$response = $this->twilio->message($number, $message);
-						Members::where('phone' ,'=',$number)->update(['status' => 'sent']);
+						Members::where('id' ,'=',$useData->id)->update(['status' => 'sent']);
 					} catch (Exception $e) {
 						echo 'Caught exception: ',  $e->getMessage(), "\n";
 						$response = $this->twilio->message(+923007272332, $e->getMessage());
