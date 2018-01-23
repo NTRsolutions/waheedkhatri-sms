@@ -94,7 +94,7 @@ class SmsSendTwilioController extends Controller
 			$number = trim(str_replace('+','', $number));
 				if(strlen(trim($number)) == 11)
 				{
-					$number = '+1'.$number;
+					$number = '+'.$number;
 					try {
 						$response = $this->twilio->message($number, $message);
 						Members::where('phone' ,'=',$number)->update(['status' => 'sent']);
