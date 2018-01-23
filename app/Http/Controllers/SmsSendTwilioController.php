@@ -68,7 +68,7 @@ class SmsSendTwilioController extends Controller
 	 * */
 	public function leadsSms(Request $request)
 	{
-		$members   = Members::where([['membertype_id' ,'=',$request->membertype_id],['status', '<>', 'unsubscribe']])->get();
+		$members   = Members::where([['membertype_id' ,'=',$request->membertype_id],['status', '<>', 'sent']])->get();
 		$leadsData = Leads::find($request->leads_id);
 		$message = $leadsData->description;
 
@@ -91,7 +91,7 @@ class SmsSendTwilioController extends Controller
 			$message = str_replace('{{Email}}',$useData->email, $message);
 			$message = str_replace('{{Phone}}',$useData->phone, $message);
 			$message = str_replace('{{Country}}',$useData->country, $message);
-			$number = str_replace('+','', $number);
+			$number = trim(str_replace('+','', $number));
 				if(strlen(trim($number)) == 11)
 				{
 					$number = '+1'.$number;
@@ -103,8 +103,7 @@ class SmsSendTwilioController extends Controller
 						$response = $this->twilio->message(+923007272332, $e->getMessage());
 					}
 				}else{
-					$number = '+'.$number;
-					Members::where('phone' ,'=',$number)->delete();
+					Members::where('id' ,'=',$number->id)->delete();
 				}
 		endforeach;
 		Members::where('membertype_id' ,'=',$request->membertype_id)->update(['leads_id' => $request->leads_id]);
