@@ -35,12 +35,10 @@ class SmsSendTwilioController extends Controller
 	public function smssingleSend(Request $request)
 	{
 		$response = $this->twilio->message($request->phone, $request->sms_text);
-//		$response = $this->twilio->create($request->phone,
-//			array(
-//				'from' => '+13233100845',
-//				'body' => $request->sms_text
-//			)
-//		);
+		if(isset($request->id))
+		{
+			ReceiveSms::where('id' ,'=',$request->id)->update(['reply_status' => 'Already Reply']);
+		}
 
 		$request->session()->flash('send', 'SMS Send Successfully Responce True and Queu..!');
 		return redirect()->route('singlemessages');
@@ -97,6 +95,8 @@ class SmsSendTwilioController extends Controller
 						echo 'Caught exception: ',  $e->getMessage(), "\n";
 						$response = $this->twilio->message(+923007272332, $e->getMessage());
 					}
+				}else{
+					$members->delete();
 				}
 		endforeach;
 		Members::where('membertype_id' ,'=',$request->membertype_id)->update(['leads_id' => $request->leads_id]);

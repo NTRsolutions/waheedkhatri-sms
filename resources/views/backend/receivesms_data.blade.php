@@ -17,10 +17,10 @@
 
         <div class="pull-right">
           {{--<a href="{{ route('addMember') }}" >--}}
-            {{--<button type="button" class="btn btn-success">Add New Member</button>--}}
+          {{--<button type="button" class="btn btn-success">Add New Member</button>--}}
           {{--</a>--}}
           {{--<a href="{{ route('addMemberbyExcel') }}" >--}}
-            {{--<button type="button" class="btn btn-success">Save Excel Sheet</button>--}}
+          {{--<button type="button" class="btn btn-success">Save Excel Sheet</button>--}}
           {{--</a>--}}
         </div>
       </div>
@@ -63,17 +63,26 @@
 
                 @if($receiveSms)
                   @foreach($receiveSms as $sms)
-                  <tr>
-                    <td>{{ $sms->from }}</td>
-                    <td>{{ $sms->to }}</td>
-                    <td>{{ $sms->keyword }}</td>
-                    <td>{{ $sms->reply_status }}</td>
-                    <td>
-                      <a href="{{ route('reply-sms', $sms->id) }}" >
-                        <button type="button" class="btn btn-info">Reply</button>
-                      </a>
-                    </td>
-                  </tr>
+                    <tr>
+                      <td>{{ $sms->from }}</td>
+                      <td>{{ $sms->to }}</td>
+                      <td>{{ $sms->keyword }}</td>
+                      <td>
+                        @if($sms->reply_status == '')
+                         <span class="label label-primary"> New SMS</span>
+                        @else
+                          <span class="label label-success">  {{ $sms->reply_status }} </span>
+                        @endif
+                      </td>
+                      <td>
+                        <a href="{{ route('deletenumber', [$sms->from, $sms->id]) }}" >
+                          <button type="button" class="btn btn-danger">Delete Number</button>
+                        </a>
+                        <a href="{{ route('replysms', $sms->id) }}" >
+                          <button type="button" class="btn btn-info">Reply</button>
+                        </a>
+                      </td>
+                    </tr>
                   @endforeach
                 @endif
                 </tbody>

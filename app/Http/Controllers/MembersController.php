@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Memberstype;
 use App\Members;
 use App\ExcelModel;
+use App\ReceiveSms;
 
 class MembersController extends Controller
 {
@@ -109,6 +110,16 @@ class MembersController extends Controller
 	}
 	public function browserCall(){
 		return view('backend.browsercall');
+	}
+
+	/*
+	 * Delete Member Record
+	 * */
+	public function deleteMemberStop($phone,$sms_id){
+
+		Members::where('phone',$phone)->delete();
+		ReceiveSms::where('id',$sms_id)->delete();
+		return redirect()->route('receivesmsdata');
 	}
 
 }
