@@ -9,7 +9,7 @@
         <!-- menu profile quick info -->
         <div class="profile clearfix">
             <div class="profile_pic">
-                <img src="https://fiverr-res.cloudinary.com/t_profile_original,q_auto,f_auto/attachments/profile/photo/8fdd96b8f00b5887c7c3ab9915f4d2d2-1512901318373/43ad4855-016d-4f95-8327-43da9a54378f.JPG" alt="..." class="img-circle profile_img">
+                <img src="{{ asset('admin/images/user.png') }}" alt="..." class="img-circle profile_img">
             </div>
             <div class="profile_info">
                 <span>Welcome,</span>
@@ -120,17 +120,18 @@
                     {{--</ul>--}}
                 {{--@endif--}}
                 <ul class="nav side-menu">
-                    <li><a><i class="fa fa-user" aria-hidden="true"></i> Members <span class="fa fa-chevron-down"></span></a>
+                    <li><a><i class="fa fa-user" aria-hidden="true"></i> SMS Sending <span class="fa fa-chevron-down"></span></a>
                         <ul class="nav child_menu">
                             <li><a href="{{ route('members-type-data') }}">Members Category</a></li>
                             <li><a href="{{ route('members-data') }}">Members Record</a></li>
                             <li><a href="{{ route('excel-members-data') }}">Excel Members Record</a></li>
                             <li><a href="{{ route('bulkmessages') }}">Send Bulk SMS</a></li>
-                            <li><a href="{{ route('singlemessages') }}">Indvidual SMS</a></li>
-                            <li><a href="{{ route('schedule_sms') }}">Schedule SMS</a></li>
-                            <li><a href="{{ route('leadsmanagement') }}">Leads Managment</a></li>
-                            <li><a href="{{ route('leadscampaign') }}">Start Leads Campaign</a></li>
-                            <li><a href="{{ route('receivesmsdata') }}">Receive SMS</a></li>
+                            <li><a href="{{ route('snchronizetwilionumber') }}">Update Twilio Numbers</a></li>
+                            {{--<li><a href="{{ route('singlemessages') }}">Indvidual SMS</a></li>--}}
+                            {{--<li><a href="{{ route('schedule_sms') }}">Schedule SMS</a></li>--}}
+                            {{--<li><a href="{{ route('leadsmanagement') }}">Leads Managment</a></li>--}}
+                            {{--<li><a href="{{ route('leadscampaign') }}">Start Leads Campaign</a></li>--}}
+                            {{--<li><a href="{{ route('receivesmsdata') }}">Receive SMS</a></li>--}}
                         </ul>
                     </li>
                 </ul>

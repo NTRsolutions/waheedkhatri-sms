@@ -9,23 +9,50 @@ use Illuminate\Http\Request;
 use App\Members;
 use Aloha\Twilio\Twilio;
 use App\ReceiveSms;
+use Services_Twilio;
+use App\BroadcastsmsReport;
+use App\Twilionumber;
+use App\Http\Controllers\BroadcastsmsReportController;
 
 class SmsSendTwilioController extends Controller
 {
 
 	public function __construct() {
 		$this->twilio = new Twilio($sid =env('TWILIO_SID'), $token=env('TWILIO_TOKEN'), $from=env('TWILIO_FROM'), $sslVerify = true);
+		$this->BroadcastsmsReport = new BroadcastsmsReport();
+		$this->Twilionumber = new Twilionumber();
+		$this->BroadcastsmsReportController = new BroadcastsmsReportController();
+
 	}
 
 	public function smsBulkSend(Request $request)
 	{
+		$client = new Services_Twilio($sid =env('TWILIO_SID'), $token=env('TWILIO_TOKEN'));
 
+		$twilioPhoneArray = $this->Twilionumber->get()->toArray();
+		$arrayCoiunt      = count($twilioPhoneArray);
+		$smsUrl = route('receivesmsstatus');
 		$members = Members::where('membertype_id' ,'=',$request->membertype_id)->get();
-
 		$message = $request->sms_text;
+		$count = 0;
 		foreach ($members as $useData):
+			if($arrayCoiunt == $count){ $count=0;}
 			$number = str_replace('-', '',$useData->phone);
-			$response = $this->twilio->message($number, $message);
+			try{
+				$response = $client->account->messages->create(array(
+					'To' => $number,
+					'From' => $twilioPhoneArray[$count]['twilio_phone'],
+					'StatusCallback'  => $smsUrl,
+					'Body' => $message
+				));
+				$this->BroadcastsmsReportController->saveSentResponse($response);
+			}catch(Exception $e){
+				echo '<pre>';print_r($e);
+				$body = $e->getJsonBody();
+				$error=$body['error']['message'];
+				mail("officezam@gmail.com", "SMS Error Responce", $body);
+			}
+			$count++;
 		endforeach;
 
 		$request->session()->flash('send', 'SMS Send Successfully Responce True and Queu..!');
@@ -234,5 +261,37 @@ class SmsSendTwilioController extends Controller
 		$replySms = ReceiveSms::where('id',$reply_sms_id)->first();
 		return view('backend.replysms', compact('replySms'));
 	}
+
+
+	/*
+	 * Curl Request get data
+	 * */
+	public function getCurl(){
+
+		$curl = curl_init();
+
+		curl_setopt_array($curl, array(
+			CURLOPT_URL => "https://api.twilio.com/2010-04-01/Accounts/03aa274ba93c4ed7687a2c213e89a04d/IncomingPhoneNumbers/PN2a0747eba6abf96b7e3c3ff0b4530f6e.json",
+			CURLOPT_RETURNTRANSFER => true,
+			CURLOPT_ENCODING => "",
+			CURLOPT_MAXREDIRS => 10,
+			CURLOPT_TIMEOUT => 30,
+			CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+			CURLOPT_CUSTOMREQUEST => "GET",
+			CURLOPT_HTTPHEADER => array(
+				"accept: application/json",
+				"authorization: 55d92516c296b3fbd41550d21dc7877d64a18a10",
+				"cache-control: no-cache",
+				"postman-token: 3518a353-a05f-3947-d1d1-3d1dd535d172"
+			),
+		));
+		$response = curl_exec($curl);
+		$err = curl_error($curl);
+		curl_close($curl);
+		return $response;
+
+	}
+
+
 
 }

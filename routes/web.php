@@ -10,6 +10,7 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+Route::post('receive-sms-status', 'BroadcastsmsReportController@smsReport')->name('receivesmsstatus');
 Route::post('receive-lead-sms', 'SmsSendTwilioController@receiveSms');
 Route::get('receiveSmsTest', 'SmsSendTwilioController@receiveSmsTest');
 Auth::routes();
@@ -127,5 +128,8 @@ Route::post('leads-sms-sending', 'SmsSendTwilioController@leadsSms')->name('lead
 Route::get('receive-sms-data', 'SmsSendTwilioController@receiveSmsData')->name('receivesmsdata');
 Route::get('receive-sms-reply/{reply_sms_id}', 'SmsSendTwilioController@reply_sms')->name('replysms');
 Route::get('delete-number/{phone}/{sms_id}', 'MembersController@deleteMemberStop')->name('deletenumber');
+
+
+Route::get('snchronize-twilio-number', 'TwilionumberController@twilioNumber')->name('snchronizetwilionumber');
 
 });

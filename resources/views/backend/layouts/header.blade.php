@@ -9,7 +9,7 @@
             <ul class="nav navbar-nav navbar-right">
                 <li class="">
                     <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                        <img src="https://fiverr-res.cloudinary.com/t_profile_original,q_auto,f_auto/attachments/profile/photo/8fdd96b8f00b5887c7c3ab9915f4d2d2-1512901318373/43ad4855-016d-4f95-8327-43da9a54378f.JPG" alt="">  {{ Auth::user()->name }}
+                        <img src="{{ asset('admin/images/user.png') }}" alt="">  {{ Auth::user()->name }}
                         <span class=" fa fa-angle-down"></span>
                     </a>
                     <ul class="dropdown-menu dropdown-usermenu pull-right">
